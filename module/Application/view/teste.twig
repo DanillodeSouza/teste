@@ -1,0 +1,109 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Foundation | Welcome</title>
+    <link rel="stylesheet" href="css/foundation.css" />
+    <script src="js/vendor/modernizr.js"></script>
+  </head>
+  <body>
+{{ teste }}
+    <div class="row">
+      <div class="large-12 columns">
+        <h1>Welcome to Foundation</h1>
+      </div>
+    </div>
+
+    <div class="row">
+
+        <h5>Teste de validação de form utilizando Foundation:</h5>
+        <form method="post" data-abide id="formDanillo">
+            <div class="password-field">
+                <label>Password <small>required</small>
+                  <input type="password" id="password" required pattern="[a-zA-Z]+">
+                </label>
+                <small class="error">Your password must match the requirements</small>
+              </div>
+              <div class="password-confirmation-field">
+                <label>Confirm Password <small>required</small>
+                  <input type="password" id="confirmPassword" required pattern="[a-zA-Z]+" data-equalto="password">
+                </label>
+                <small class="error">The password did not match</small>
+              </div>
+                  <div class="row">
+                    <div class="large-12 columns">
+                      <label>Input Label</label>
+                      <input type="text" placeholder="large-12.columns" />
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="large-4 medium-4 columns">
+                      <label>E-mail <small>Obrigatório</small></label>
+                      <input type="email" id="email" required placeholder="large-4.columns" />
+                      <small class="error">Ops! Precisamos de um-email :)</small>
+                    </div>
+                    <div class="large-4 medium-4 columns">
+                      <label>Input Label</label>
+                      <input type="text" placeholder="large-4.columns" />
+                    </div>
+                    <div class="large-4 medium-4 columns">
+                      <div class="row collapse">
+                        <label>Input Label</label>
+                        <div class="small-9 columns">
+                          <input type="text" placeholder="small-9.columns" />
+                        </div>
+                        <div class="small-3 columns">
+                          <span class="postfix">.com</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="large-12 columns">
+                      <label>Select Box</label>
+                      <select>
+                        <option value="husker">Husker</option>
+                        <option value="starbuck">Starbuck</option>
+                        <option value="hotdog">Hot Dog</option>
+                        <option value="apollo">Apollo</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="large-6 medium-6 columns">
+                      <label>Choose Your Favorite</label>
+                      <input type="radio" name="pokemon" value="Red" id="pokemonRed"><label for="pokemonRed">Radio 1</label>
+                      <input type="radio" name="pokemon" value="Blue" id="pokemonBlue"><label for="pokemonBlue">Radio 2</label>
+                    </div>
+                    <div class="large-6 medium-6 columns">
+                      <label>Check these out</label>
+                      <input id="checkbox1" type="checkbox"><label for="checkbox1">Checkbox 1</label>
+                      <input id="checkbox2" type="checkbox"><label for="checkbox2">Checkbox 2</label>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="large-12 columns">
+                      <label>Textarea Label</label>
+                      <textarea placeholder="small-12.columns"></textarea>
+                    </div>
+                  </div>
+                    <button class="medium secondary round button">Enviar</button>
+                  </div>
+                </form>
+      </div>
+
+    <script src="js/vendor/jquery.js"></script>
+    <script src="js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+      $("#formDanillo").on('invalid.fndtn.abide', function (e) {
+          var invalid_fields = $(this).find('[data-invalid]');
+          console.log(invalid_fields);
+      })
+        .on('valid.fndtn.abide', function (e) {
+            console.log(e);
+        });
+    </script>
+  </body>
+</html>
