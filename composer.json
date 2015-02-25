@@ -6,7 +6,8 @@
     	}],
 	"require": {
 	    "zendframework/zendframework": "2.3.*",
-	    "zf-commons/zfc-twig": "dev-master"
+	    "zf-commons/zfc-twig": "dev-master",
+	    "vimeo/vimeo-api" : "1.1.*"
 	}
 }
 

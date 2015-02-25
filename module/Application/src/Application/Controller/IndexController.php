@@ -12,18 +12,30 @@ namespace Application\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Http\Client;
-use Zend\Http\Headers;
-use Zend\Http\Header\ContentLength;
-use Zend\Http\Header\ContentType;
 
 class IndexController extends AbstractActionController
 {
     public function indexAction()
     {
     	try {
-    		$urlLinkedIn = 'updates?oauth2_access_token=AQXyCvb4gO0X2qVe84vvEMtnvKiWdfSn2W99N_vLbnNGyElO4BLb-k0Ir2XfYGMlw3hdFAAvnOkRYeiKbyCWKJyZDpUeqLjLbP7qoNRd3j2WSz_HIl9lWf7_XikTLMviTpGlUBBqOcIeyoTRWdWsXsxHPO0poRAbMRMbjvPzMZVn_--KTdc&event-type=status-update';
+            $clientId = "15800d3ce49265a5e599bbb4253453418f726797";
+            $clientSecret = "0431e781019d4917be0f03fe4e723390d84aa4cc";
+            $accessToken = "e49cac72b09f3c684d722233e4bf6676";
+            $lib = new \Vimeo\Vimeo($clientId, $clientSecret);
+            $lib->setToken($accessToken);
+            $scope = array();
+    		$urlVimeo = 'https://api.vimeo.com/videos';
+            $response = $lib->request(
+                '/videos',
+                array(
+                    'search' => 'teste',
+                    'per_page' => 2
+                ),
+                'GET'
+                );
+            var_dump($response);die;
     		$client = new Client(
-    			'https://api.linkedin.com/v1/companies/1337/updates?event-type=status-update',
+    			$urlVimeo,
     			array(
 				   'sslcapath' => '/etc/ssl/certs'
 				)
