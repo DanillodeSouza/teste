@@ -1,0 +1,8 @@
+#formBuscar {
+	left: 50%;
+	top: 50%;
+	position: absolute;
+	width: 100%;
+	margin-left:-350px;
+	margin-top:-40px;
+}

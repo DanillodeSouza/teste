@@ -23,9 +23,9 @@ return array(
             'teste' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
-                    'route'    => '/teste',
+                    'route'    => '/buscar',
                     'defaults' => array(
-                        'controller' => 'Application\Controller\Teste',
+                        'controller' => 'Application\Controller\Buscar',
                         'action'     => 'index',
                     ),
                 ),
@@ -88,7 +88,7 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'Application\Controller\Index' => 'Application\Controller\IndexController',
-            'Application\Controller\Teste' => 'Application\Controller\TesteController',
+            'Application\Controller\Buscar' => 'Application\Controller\BuscarController',
         ),
     ),
     'view_manager' => array(

@@ -29,6 +29,10 @@ class Vimeo
         $urlPrimeiroVideo = $response['body']['data'][0]['uri'];
     }
 
+    /**
+    * @param array opções
+    * @return boolean
+    **/
     private function validarParametros(array $options)
     {
     	if (isset($options['query'])) {

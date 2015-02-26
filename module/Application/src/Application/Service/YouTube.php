@@ -22,8 +22,6 @@ class YouTube
 		    		'maxResults' => 2,
 		    	)
 		    );
-		    echo "<pre>";
-		    print_r($searchResponse);die;
 		} catch(\Exception $e) {
 			var_dump($e->getMessage());die;
 		}
