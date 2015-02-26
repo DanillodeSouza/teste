@@ -26,6 +26,16 @@ class IndexController extends AbstractActionController
         } catch(\Exception $e) {
             var_dump($e->getMessage());die;
         }
+
+        try {
+            $opcoesBusca = array(
+                'query' => 'teste'
+            );
+            $this->getServiceLocator()->get('Application\Service\YouTube')
+                ->buscar($opcoesBusca);
+        } catch(\Exception $e) {
+            var_dump($e->getMessage());die;
+        }
         
 		/*$client = new Client(
 			$urlVimeo,

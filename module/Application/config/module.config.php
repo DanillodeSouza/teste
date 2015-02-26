@@ -71,7 +71,8 @@ return array(
             'translator' => 'MvcTranslator',
         ),
         'invokables' => array(
-            'Application\Service\Vimeo' => 'Application\Service\Vimeo'
+            'Application\Service\Vimeo' => 'Application\Service\Vimeo',
+            'Application\Service\YouTube' => 'Application\Service\YouTube'
         )
     ),
     'translator' => array(
