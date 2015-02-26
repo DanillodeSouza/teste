@@ -15,35 +15,6 @@ use Zend\Http\Client;
 
 class IndexController extends AbstractActionController
 {
-    public function buscarAction()
-    {
-        try {
-            $opcoesBusca = array(
-                'query' => 'teste'
-            );
-            $this->getServiceLocator()->get('Application\Service\Vimeo')
-                ->buscar($opcoesBusca);
-        } catch(\Exception $e) {
-            //var_dump($e->getMessage());die;
-        }
-
-        try {
-            $opcoesBusca = array(
-                'query' => 'teste'
-            );
-            $this->getServiceLocator()->get('Application\Service\YouTube')
-                ->buscar($opcoesBusca);
-        } catch(\Exception $e) {
-            //var_dump($e->getMessage());die;
-        }
-
-        $view =  new ViewModel();
-        $view->setTemplate('index');
-        $view->setTerminal(true);
-        $view->setVariable('url' , 'https://vimeo.com/111248229');
-        return $view;
-    }
-
     public function indexAction()
     {
         try {
@@ -66,16 +37,6 @@ class IndexController extends AbstractActionController
             var_dump($e->getMessage());die;
         }
         
-		/*$client = new Client(
-			$urlVimeo,
-			array(
-			   'sslcapath' => '/etc/ssl/certs'
-			)
-		);
-    	$client->setMethod('GET');
-    	$response = $client->send();
-    	var_dump($response->getBody());die;*/
-    	
        	$view =  new ViewModel();
         $view->setTemplate('index');
         $view->setTerminal(true);
