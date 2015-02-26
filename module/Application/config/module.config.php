@@ -70,6 +70,9 @@ return array(
         'aliases' => array(
             'translator' => 'MvcTranslator',
         ),
+        'invokables' => array(
+            'Application\Service\Vimeo' => 'Application\Service\Vimeo'
+        )
     ),
     'translator' => array(
         'locale' => 'en_US',
