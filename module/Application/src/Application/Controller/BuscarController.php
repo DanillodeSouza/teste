@@ -12,20 +12,14 @@ class BuscarController extends AbstractActionController
     	$opcoesBusca = $this->getRequest()->getPost()->toArray();
 
     	try {
-            $opcoesBusca = array(
-                'query' => 'teste'
-            );
-            $this->getServiceLocator()->get('Application\Service\Vimeo')
+            $videosVimeo = $this->getServiceLocator()->get('Application\Service\Vimeo')
                 ->buscar($opcoesBusca);
         } catch(\Exception $e) {
             //var_dump($e->getMessage());die;
         }
 
         try {
-            $opcoesBusca = array(
-                'query' => 'teste'
-            );
-            $this->getServiceLocator()->get('Application\Service\YouTube')
+            $videosYouTube = $this->getServiceLocator()->get('Application\Service\YouTube')
                 ->buscar($opcoesBusca);
         } catch(\Exception $e) {
             //var_dump($e->getMessage());die;
@@ -34,13 +28,9 @@ class BuscarController extends AbstractActionController
         $view =  new ViewModel();
         $view->setTemplate('resultado');
         $view->setTerminal(true);
-        $view->setVariable('url' , 'https://vimeo.com/111248229');
-        return $view;
+        $view->setVariable('videosVimeo' , $videosVimeo);
+        $view->setVariable('videosYouTube' , $videosYouTube);
 
-        $viewModel = new ViewModel();
-        $viewModel->setTemplate('resultado');
-        $viewModel->setVariable('teste', 'uhlala');
-        $viewModel->setTerminal(true);
-        return $viewModel;
+        return $view;
     }
 }

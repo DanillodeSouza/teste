@@ -5,20 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>WannaWatch | Resultado</title>
     <link rel="stylesheet" href="css/foundation.css" />
+    <link rel="stylesheet" href="css/application/resultado.css" />
     <script src="js/vendor/modernizr.js"></script>
   </head>
   <body>
 
     <div class="row">
       <div class="large-12 columns">
-        <h1>Resultados</h1>
+        <h1>WannaWatch :)</h1>
       </div>
     </div>
 
-    <div class="row">
-      <h5>{{ teste }}</h5>
+    <p><span class="youtube-logo"></span></p>
+    <div class="large-6 columns">
+        <ul class="small-block-grid-2 medium-block-grid-3 large-block-grid-4">
+            {% for videoYouTube in videosYouTube %}
+            <li>
+                <a class="th" href="{{ videoYouTube.link }}">
+                    <img src="{{ videoYouTube.urlThumbNail }}">
+                </a>
+                <a href="{{ videoYouTube.link }}">
+                    {{ videoYouTube.titulo }}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
     </div>
-    
+
+    <p><img src="https://f.vimeocdn.com/logo.svg"></p>
+    <div class="large-6 columns">
+        <ul class="small-block-grid-2 medium-block-grid-3 large-block-grid-4">
+            {% for videoVimeo in videosVimeo %}
+            <li>
+                <a class="th" href="{{ videoVimeo.link }}">
+                    <img src="{{ videoVimeo.urlThumbNail }}">
+                </a>
+                <a href="{{ videoVimeo.link }}">
+                    {{ videoVimeo.titulo }}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
     <script src="js/vendor/jquery.js"></script>
     <script src="js/foundation.min.js"></script>
     <script>
