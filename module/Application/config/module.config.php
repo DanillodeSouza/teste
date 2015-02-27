@@ -30,6 +30,16 @@ return array(
                     ),
                 ),
             ),
+            'redimensiona-imagem' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/redimensiona-imagem',
+                    'defaults' => array(
+                        'controller' => 'Application\Controller\Image\ImageController',
+                        'action'     => 'redimensiona',
+                    ),
+                ),
+            ),
             // The following is a route to simplify getting started creating
             // new controllers and actions without needing to create a new
             // module. Simply drop new controllers in, and you can access them
@@ -72,7 +82,8 @@ return array(
         ),
         'invokables' => array(
             'Application\Service\Vimeo' => 'Application\Service\Vimeo',
-            'Application\Service\YouTube' => 'Application\Service\YouTube'
+            'Application\Service\YouTube' => 'Application\Service\YouTube',
+            'Application\Imagem\Resize' => 'Application\Imagem\Resize'
         )
     ),
     'translator' => array(
@@ -89,6 +100,7 @@ return array(
         'invokables' => array(
             'Application\Controller\Index' => 'Application\Controller\IndexController',
             'Application\Controller\Buscar' => 'Application\Controller\BuscarController',
+            'Application\Controller\Image\ImageController' => 'Application\Controller\Image\ImageController',
         ),
     ),
     'view_manager' => array(

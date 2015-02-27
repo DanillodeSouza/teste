@@ -26,7 +26,7 @@ class YouTube
 		    	snippet',
 		    	array(
 		    		'q' => $options['query'],
-		    		'maxResults' => 10,
+		    		'maxResults' => 9,
 		    	)
 		    );
 		    return $this->extrairVideosFromResponse($response);
@@ -51,7 +51,7 @@ class YouTube
     		$video->setTitulo($videoData->getSnippet()['title']);
     		$video->setUrlThumbNail(
     			sprintf(
-    				Video::THUMBNAIL_LINK,
+    				Video::YOUTUBE_THUMBNAIL_LINK,
     				$videoData->getId()->getVideoId()
     			)
     		);
