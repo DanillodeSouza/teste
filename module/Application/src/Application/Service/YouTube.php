@@ -26,7 +26,7 @@ class YouTube
 		    	snippet',
 		    	array(
 		    		'q' => $options['query'],
-		    		'maxResults' => 9,
+		    		'maxResults' => 10,
 		    	)
 		    );
 		    return $this->extrairVideosFromResponse($response);
@@ -36,8 +36,8 @@ class YouTube
 	}
 
     /**
-    *
     * Extrai entidades de vídeos a partir da resposta do YouTube
+    * 
     * @param array
     * @return SplObjectStorage
     **/
@@ -47,16 +47,29 @@ class YouTube
     	foreach ($response->getItems() as $videoData) {
     		$video = new Video();
     		$video->setId($videoData->getId()->getVideoId());
-    		$video->setLink(Video::YOUTUBE_SUFIXO_LINK . $videoData->getId()->getVideoId());
+    		$this->extrairLink($video, $videoData);
     		$video->setTitulo($videoData->getSnippet()['title']);
-    		$video->setUrlThumbNail(
-    			sprintf(
-    				Video::YOUTUBE_THUMBNAIL_LINK,
-    				$videoData->getId()->getVideoId()
-    			)
-    		);
+            $video->setUrlThumbNail(
+                $videoData->getSnippet()->getThumbnails()->getMedium()->getUrl()
+            );
     		$videos->attach($video);
     	}
     	return $videos;
+    }
+
+    /**
+    * Extrai o link do vídeo
+    * 
+    * @param Application\Entity\Video
+    * @param Google_Service_YouTube_SearchResult
+    * @return void
+    */
+    private function extrairLink($video, $dados)
+    {
+        if ($dados->getId()->getKind() == Video::YOUTUBE_CANAL) {
+            $video->setLink(Video::YOUTUBE_CANAL_SUFIXO_LINK . $dados->getSnippet()->getChannelTitle());
+        } elseif ($dados->getId()->getKind() == Video::YOUTUBE_VIDEO) {
+            $video->setLink(Video::YOUTUBE_SUFIXO_LINK . $dados->getId()->getVideoId());
+        }
     }
 }

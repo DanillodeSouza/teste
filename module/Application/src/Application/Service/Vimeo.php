@@ -29,7 +29,7 @@ class Vimeo
             array(
                 'query' => $options['query'],
                 'page' => 1,
-                'per_page' => 9
+                'per_page' => 10
             ),
             'GET'
         );

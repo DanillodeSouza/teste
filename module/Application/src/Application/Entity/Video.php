@@ -5,8 +5,10 @@ namespace Application\Entity;
 class Video
 {
 	const YOUTUBE_SUFIXO_LINK = 'https://www.youtube.com/watch?v=';
-	const YOUTUBE_THUMBNAIL_LINK = 'https://i.ytimg.com/vi/%s/mqdefault.jpg';
+	const YOUTUBE_CANAL_SUFIXO_LINK = 'https://www.youtube.com/user/';
 	const VIMEO_SUFIXO_LINK = 'https://www.vimeo.com/';
+	const YOUTUBE_VIDEO = 'youtube#video';
+	const YOUTUBE_CANAL = 'youtube#channel';
 	
 	private $id;
 	private $titulo;

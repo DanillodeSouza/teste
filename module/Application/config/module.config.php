@@ -86,6 +86,11 @@ return array(
             'Application\Imagem\Resize' => 'Application\Imagem\Resize'
         )
     ),
+    'view_helpers' => array(
+        'invokables' => array(
+            'cortarString' => 'Application\View\Helper\CortarString',
+        ),
+    ),
     'translator' => array(
         'locale' => 'en_US',
         'translation_file_patterns' => array(

@@ -28,10 +28,10 @@
                     {% for videoYouTube in videosYouTube %}
                     <li>
                         <a class="th" href="{{ videoYouTube.link }}">
-                            <img src="/redimensiona-imagem?url={{ videoYouTube.urlThumbNail }}">
+                            <img src="{{ videoYouTube.urlThumbNail }}">
                         </a>
                         <a href="{{ videoYouTube.link }}">
-                            {{ videoYouTube.titulo }}
+                            {{ cortarString(videoYouTube.titulo, 28) }}
                         </a>
                     </li>
                     {% endfor %}
@@ -48,10 +48,10 @@
                 {% for videoVimeo in videosVimeo %}
                 <li>
                     <a class="th" href="{{ videoVimeo.link }}">
-                        <img src="/redimensiona-imagem?url={{ videoVimeo.urlThumbNail }}">
+                        <img src="{{ videoVimeo.urlThumbNail }}">
                     </a>
                     <a href="{{ videoVimeo.link }}">
-                        {{ videoVimeo.titulo }}
+                        {{ cortarString(videoVimeo.titulo, 28) }}
                     </a>
                 </li>
                 {% endfor %}
