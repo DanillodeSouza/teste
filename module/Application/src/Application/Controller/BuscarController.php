@@ -4,6 +4,7 @@ namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Zend\View\Model\JsonModel;
 
 class BuscarController extends AbstractActionController
 {
@@ -19,8 +20,9 @@ class BuscarController extends AbstractActionController
         }
 
         try {
-            $videosYouTube = $this->getServiceLocator()->get('Application\Service\YouTube')
-                ->buscar($opcoesBusca);
+            $youtubeService = $this->getServiceLocator()->get('Application\Service\YouTube');
+            $youtubeService->setServiceLocator($this->getServiceLocator());
+            $resultadoYouTube = $youtubeService->buscar($opcoesBusca);
         } catch(\Exception $e) {
             //var_dump($e->getMessage());die;
         }
@@ -29,8 +31,26 @@ class BuscarController extends AbstractActionController
         $view->setTemplate('resultado');
         $view->setTerminal(true);
         $view->setVariable('videosVimeo' , $videosVimeo);
-        $view->setVariable('videosYouTube' , $videosYouTube);
+        $view->setVariable('resultadoYouTube' , $resultadoYouTube);
 
+        return $view;
+    }
+
+    public function paginarAction()
+    {
+        $opcoesBusca = $this->getRequest()->getPost()->toArray();
+
+        try {
+            $youtubeService = $this->getServiceLocator()->get('Application\Service\YouTube');
+            $resultadoYouTube = $youtubeService->paginar($opcoesBusca);
+        } catch(\Exception $e) {
+            //var_dump($e->getMessage());die;
+        }
+
+        $view = new ViewModel();
+        $view->setTemplate('include/videosYoutube');
+        $view->setVariable('resultadoYouTube' , $resultadoYouTube);
+        $view->setTerminal(true);
         return $view;
     }
 }

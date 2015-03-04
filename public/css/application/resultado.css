@@ -9,3 +9,13 @@
 a {
   font-size: 13px;
 }
+.tituloCabecalho {
+	text-align: right;
+	color: white;
+	font-size: 19px;
+}
+header {
+	background: #008CBA;
+	clear:both;
+	padding: 1px 0 0px;
+}

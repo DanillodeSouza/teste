@@ -1,0 +1,37 @@
+<link rel="stylesheet" href="css/application/videosYoutube.css" />
+
+<p>
+    <a href="http://www.youtube.com" target="_blank">
+        <span class="youtube-logo"></span>
+    </a>
+</p>
+ 
+<ul class="small-block-grid-2 medium-block-grid-3 large-block-grid-2">
+    {% for videoYouTube in resultadoYouTube.videos %}
+    <li>
+        <a class="th" href="{{ videoYouTube.link }}">
+            <img src="{{ videoYouTube.urlThumbNail }}">
+        </a>
+        <a href="{{ videoYouTube.link }}">
+            {{ cortarString(videoYouTube.titulo, 28) }}
+        </a>
+    </li>
+    {% endfor %}
+</ul>
+<div class="row">
+    <div id="divPaginarContainer" class="small-4 columns">
+      <div id="divPaginar" class="row collapse prefix-round">
+        <div class="large-6 columns">
+            <a href="javascript:void(0)" data-token="{{ resultadoYouTube.paginacao.prevToken }}" class="linkPaginar button postfix {%if resultadoYouTube.paginacao.prevToken == '' %} disabled {% endif %}">
+                <<
+            </a>
+        </div>
+        <div class="large-6 columns">
+            <a href="javascript:void(0)" data-token="{{ resultadoYouTube.paginacao.nextToken }}" class="linkPaginar button postfix {%if resultadoYouTube.paginacao.nextToken == '' %} disabled {% endif %}">
+                >>  
+            </a>
+        </div>
+      </div>
+    </div>
+</div>
+<input type="hidden" id="query" value="{{ resultadoYouTube.query }}">

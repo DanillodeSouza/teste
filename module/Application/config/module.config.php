@@ -20,13 +20,23 @@ return array(
                     ),
                 ),
             ),
-            'teste' => array(
+            'buscar' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
                     'route'    => '/buscar',
                     'defaults' => array(
                         'controller' => 'Application\Controller\Buscar',
                         'action'     => 'index',
+                    ),
+                ),
+            ),
+            'paginar' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/paginar',
+                    'defaults' => array(
+                        'controller' => 'Application\Controller\Buscar',
+                        'action'     => 'paginar',
                     ),
                 ),
             ),

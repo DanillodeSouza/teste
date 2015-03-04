@@ -9,20 +9,7 @@
 	
 	</head>
 	<body>
-		<form method="post" action="/buscar" id="formBuscar" data-abide>
-			<div class="row">
-		    <div class="large-6 columns">
-		      <div class="row collapse postfix-round">
-		        <div class="small-9 columns">
-		          <input type="text" name="query" required autocomplete="off" placeholder="Digite o que quer assistir :)">
-		        </div>
-		        <div class="small-3 columns">
-		          <button class="button postfix">Wanna Watch :)</a>
-		        </div>
-		      </div>
-		    </div>
-		  </div>
-		</form>
+		{% include 'include/formBusca.twig' %}
 
 		<a href="{{ url }}" target="_blank"></a>
 		<script src="js/vendor/modernizr.js"></script>
