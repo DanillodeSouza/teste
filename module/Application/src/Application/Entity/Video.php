@@ -5,7 +5,7 @@ namespace Application\Entity;
 class Video
 {
 	const YOUTUBE_SUFIXO_LINK = 'https://www.youtube.com/watch?v=';
-	const YOUTUBE_CANAL_SUFIXO_LINK = 'https://www.youtube.com/user/';
+	const YOUTUBE_CANAL_SUFIXO_LINK = 'https://www.youtube.com/channel/';
 	const VIMEO_SUFIXO_LINK = 'https://www.vimeo.com/';
 	const YOUTUBE_VIDEO = 'youtube#video';
 	const YOUTUBE_CANAL = 'youtube#channel';

@@ -19,25 +19,8 @@
             {% include 'include/videosYoutube.twig' %}
         </div>
 
-        <div class="small-4 large-6 columns">
-            <p style="height:29px">
-                <a href="http://www.vimeo.com" target="_blank">
-                    <img src="https://f.vimeocdn.com/logo.svg">
-                </a>
-            </p>
-
-            <ul class="small-block-grid-2 medium-block-grid-3 large-block-grid-2">
-                {% for videoVimeo in videosVimeo %}
-                <li>
-                    <a class="th" href="{{ videoVimeo.link }}">
-                        <img src="{{ videoVimeo.urlThumbNail }}">
-                    </a>
-                    <a href="{{ videoVimeo.link }}">
-                        {{ cortarString(videoVimeo.titulo, 28) }}
-                    </a>
-                </li>
-                {% endfor %}
-            </ul>
+        <div id="videosVimeo">
+            {% include 'include/videosVimeo.twig' %}
         </div>
     </div>
 

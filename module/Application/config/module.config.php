@@ -30,13 +30,23 @@ return array(
                     ),
                 ),
             ),
-            'paginar' => array(
+            'paginarYoutube' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
-                    'route'    => '/paginar',
+                    'route'    => '/paginar-youtube',
                     'defaults' => array(
                         'controller' => 'Application\Controller\Buscar',
-                        'action'     => 'paginar',
+                        'action'     => 'paginarYoutube',
+                    ),
+                ),
+            ),
+            'paginarVimeo' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/paginar-vimeo',
+                    'defaults' => array(
+                        'controller' => 'Application\Controller\Buscar',
+                        'action'     => 'paginarVimeo',
                     ),
                 ),
             ),

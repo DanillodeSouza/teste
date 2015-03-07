@@ -1,8 +1,8 @@
 <?php
 
-namespace Application\Entity;
+namespace Application\Entity\Paginacao;
 
-class Paginacao
+class YouTube
 {
 	public $nextToken;
 	public $prevToken;

@@ -3,6 +3,7 @@
 namespace Application\Service;
 
 use Application\Entity\Video;
+use Application\Entity\Paginacao\Vimeo as Paginacao;
 
 class Vimeo
 {
@@ -11,7 +12,7 @@ class Vimeo
     const ACCESSTOKEN = "e49cac72b09f3c684d722233e4bf6676";
 
     /**
-    * Busca vídeos utulizando a api do Vimeo a partir dos parâmetros passados
+    * Busca vídeos utilizando a api do Vimeo a partir dos parâmetros passados
     * @param array
     * @return SplObjectStorage 
     */
@@ -28,13 +29,45 @@ class Vimeo
             '/videos',
             array(
                 'query' => $options['query'],
-                'page' => 1,
                 'per_page' => 10
             ),
             'GET'
         );
+        $resultado = new \ArrayObject();
+        $videos = $this->extrairVideosFromResponse($response);
+        $paginacao = $this->extrairPaginacaoFromResponse($response);
+        $resultado->offsetSet('query', $options['query']);
+        $resultado->offsetSet('videos', $videos);
+        $resultado->offsetSet('paginacao', $paginacao);
+        return $resultado;
+    }
 
-        return $this->extrairVideosFromResponse($response);
+    /**
+    * Busca vídeos utilizando a api do Vimeo a partir dos parâmetros passados
+    * @param array opcoesBusca
+    * @return SplObjectStorage 
+    */
+    public function paginar($opcoesBusca)
+    {
+        $lib = new \Vimeo\Vimeo(self::CLIENT_ID, self::CLIENT_SECRET);
+        $lib->setToken(self::ACCESSTOKEN);
+        $scope = array();
+        $response = $lib->request(
+            '/videos',
+            array(
+                'query' => $opcoesBusca['/videos?query'],
+                'page' => $opcoesBusca['page'],
+                'per_page' => $opcoesBusca['per_page']
+            ),
+            'GET'
+        );
+        $resultado = new \ArrayObject();
+        $videos = $this->extrairVideosFromResponse($response);
+        $paginacao = $this->extrairPaginacaoFromResponse($response);
+        $resultado->offsetSet('query', $opcoesBusca['/videos?query']);
+        $resultado->offsetSet('videos', $videos);
+        $resultado->offsetSet('paginacao', $paginacao);
+        return $resultado;
     }
 
     /**
@@ -69,5 +102,21 @@ class Vimeo
     		return true;
     	}
     	return false;
+    }
+
+    /**
+    * Extrai os dados de paginação da resposta
+    *
+    * @param array
+    * @return Application\Entity\Paginacao
+    **/
+    private function extrairPaginacaoFromResponse($response)
+    {
+        $paginacao = new Paginacao();
+        $paginacao->next = $response['body']['paging']['next'];
+        $paginacao->previous = $response['body']['paging']['previous'];
+        $paginacao->totalResults = $response['body']['total'];
+
+        return $paginacao;
     }
 }

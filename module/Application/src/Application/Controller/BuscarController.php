@@ -13,10 +13,10 @@ class BuscarController extends AbstractActionController
     	$opcoesBusca = $this->getRequest()->getPost()->toArray();
 
     	try {
-            $videosVimeo = $this->getServiceLocator()->get('Application\Service\Vimeo')
+            $resultadoVimeo = $this->getServiceLocator()->get('Application\Service\Vimeo')
                 ->buscar($opcoesBusca);
         } catch(\Exception $e) {
-            //var_dump($e->getMessage());die;
+            var_dump($e->getMessage());die;
         }
 
         try {
@@ -24,19 +24,19 @@ class BuscarController extends AbstractActionController
             $youtubeService->setServiceLocator($this->getServiceLocator());
             $resultadoYouTube = $youtubeService->buscar($opcoesBusca);
         } catch(\Exception $e) {
-            //var_dump($e->getMessage());die;
+            var_dump($e->getMessage());die;
         }
 
         $view =  new ViewModel();
         $view->setTemplate('resultado');
         $view->setTerminal(true);
-        $view->setVariable('videosVimeo' , $videosVimeo);
+        $view->setVariable('resultadoVimeo' , $resultadoVimeo);
         $view->setVariable('resultadoYouTube' , $resultadoYouTube);
 
         return $view;
     }
 
-    public function paginarAction()
+    public function paginarYoutubeAction()
     {
         $opcoesBusca = $this->getRequest()->getPost()->toArray();
 
@@ -44,12 +44,30 @@ class BuscarController extends AbstractActionController
             $youtubeService = $this->getServiceLocator()->get('Application\Service\YouTube');
             $resultadoYouTube = $youtubeService->paginar($opcoesBusca);
         } catch(\Exception $e) {
-            //var_dump($e->getMessage());die;
+            var_dump($e->getMessage());die;
         }
 
         $view = new ViewModel();
         $view->setTemplate('include/videosYoutube');
         $view->setVariable('resultadoYouTube' , $resultadoYouTube);
+        $view->setTerminal(true);
+        return $view;
+    }
+
+    public function paginarVimeoAction()
+    {
+        $opcoesBusca = $this->getRequest()->getPost()->toArray();
+
+        try {
+            $vimeoService = $this->getServiceLocator()->get('Application\Service\Vimeo');
+            $resultadoVimeo = $vimeoService->paginar($opcoesBusca);
+        } catch(\Exception $e) {
+            var_dump($e->getMessage());die;
+        }
+
+        $view = new ViewModel();
+        $view->setTemplate('include/videosVimeo');
+        $view->setVariable('resultadoVimeo' , $resultadoVimeo);
         $view->setTerminal(true);
         return $view;
     }

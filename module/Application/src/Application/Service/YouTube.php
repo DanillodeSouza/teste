@@ -3,7 +3,7 @@
 namespace Application\Service;
 
 use Application\Entity\Video;
-use Application\Entity\Paginacao;
+use Application\Entity\Paginacao\YouTube as Paginacao;
 
 class YouTube
 {
@@ -31,7 +31,7 @@ class YouTube
 		    );
             $resultado = new \ArrayObject();
 		    $videos = $this->extrairVideosFromResponse($response);
-            $paginacao = $this->extrairPaginacaoFromResponse($response, $videos);
+            $paginacao = $this->extrairPaginacaoFromResponse($response);
             $resultado->offsetSet('query', $options['query']);
             $resultado->offsetSet('videos', $videos);
             $resultado->offsetSet('paginacao', $paginacao);
@@ -62,7 +62,7 @@ class YouTube
             );
             $resultado = new \ArrayObject();
             $videos = $this->extrairVideosFromResponse($response);
-            $paginacao = $this->extrairPaginacaoFromResponse($response, $videos);
+            $paginacao = $this->extrairPaginacaoFromResponse($response);
             $resultado->offsetSet('query', $options['query']);
             $resultado->offsetSet('videos', $videos);
             $resultado->offsetSet('paginacao', $paginacao);
@@ -116,7 +116,7 @@ class YouTube
     private function extrairLink($video, $dados)
     {
         if ($dados->getId()->getKind() == Video::YOUTUBE_CANAL) {
-            $video->setLink(Video::YOUTUBE_CANAL_SUFIXO_LINK . $dados->getSnippet()->getChannelTitle());
+            $video->setLink(Video::YOUTUBE_CANAL_SUFIXO_LINK . $dados->getSnippet()->getChannelId());
         } elseif ($dados->getId()->getKind() == Video::YOUTUBE_VIDEO) {
             $video->setLink(Video::YOUTUBE_SUFIXO_LINK . $dados->getId()->getVideoId());
         }
