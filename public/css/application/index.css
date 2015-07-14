@@ -1,10 +1,9 @@
 #formBuscar {
-	left: 50%;
 	top: 50%;
+    left: 50%;
 	position: absolute;
-	width: 100%;
-	margin-left:-350px;
-	margin-top:-40px;
+	width: 600px;
+	margin-left: -301px;
 }
 body {
   font-size: 20px !important;
