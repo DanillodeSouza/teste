@@ -1,11 +1,3 @@
-.youtube-logo {
-	display: inline-block;
-	vertical-align: middle;
-	background: no-repeat url(//s.ytimg.com/yts/imgbin/www-hitchhiker-vflA7KI54.webp) -432px -193px;
-	background-size: auto;
-	width: 72px;
-	height: 30px;
-}
 a {
   font-size: 13px;
 }
@@ -18,4 +10,8 @@ header {
 	background: #008CBA;
 	clear:both;
 	padding: 1px 0 0px;
+}
+button {
+    color: #008cba !important;
+		background-color: #fff !important;
 }

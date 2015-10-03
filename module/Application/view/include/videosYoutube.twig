@@ -1,11 +1,9 @@
-<link rel="stylesheet" href="css/application/videosYoutube.css" />
-
-<p>
+<p class="logo">
     <a href="http://www.youtube.com" target="_blank">
-        <span class="youtube-logo"></span>
+        <img src="../../img/2000px-YouTube_logo_2013.svg.png" width="110" height="40">
     </a>
 </p>
- 
+
 <ul class="small-block-grid-2 medium-block-grid-3 large-block-grid-2">
     {% for videoYouTube in resultadoYouTube.videos %}
     <li>
@@ -28,7 +26,7 @@
         </div>
         <div class="large-6 columns">
             <a href="javascript:void(0)" data-token="{{ resultadoYouTube.paginacao.nextToken }}" class="linkPaginar button postfix {%if resultadoYouTube.paginacao.nextToken == '' %} disabled {% endif %}">
-                >>  
+                >>
             </a>
         </div>
       </div>
