@@ -4,6 +4,9 @@ namespace Application\Service;
 
 use Application\Entity\Video;
 use Application\Entity\Paginacao\Vimeo as Paginacao;
+use Vimeo\Vimeo as VimeoClass;
+use Zend\Http\Request;
+use Zend\Http\Client;
 
 class Vimeo
 {
@@ -22,17 +25,29 @@ class Vimeo
     		throw new \Exception("O parâmetro query é obrigatório.");
     	}
 
-    	$lib = new \Vimeo\Vimeo(self::CLIENT_ID, self::CLIENT_SECRET);
-        $lib->setToken(self::ACCESSTOKEN);
-        $scope = array();
-        $response = $lib->request(
-            '/videos',
+        $client = new Client(
+            VimeoClass::ROOT_ENDPOINT . "/videos" . "?query= " . $options["query"] .
+                "&per_page=10",
             array(
-                'query' => $options['query'],
-                'per_page' => 10
-            ),
-            'GET'
+                'adapter' => 'Zend\Http\Client\Adapter\Curl',
+                'proxyhost' => 'proxy.devel',
+                'proxyport' => '8180',
+                'proxyuser' => 'danillobarreto',
+                'proxypass' => 'db25896',
+                'timeout'   => 100,
+            )
         );
+        $client->setMethod(Request::METHOD_GET);
+        $headers = array(
+
+        );
+        $headers[] = 'Accept: ' . VimeoClass::VERSION_STRING;
+        $headers[] = 'User-Agent: ' . VimeoClass::USER_AGENT;
+        $headers[] = 'Authorization: Bearer ' . self::ACCESSTOKEN;
+
+        $client->setHeaders($headers);
+        $response = $client->send();
+        $response = json_decode($response->getBody());
         $resultado = new \ArrayObject();
         $videos = $this->extrairVideosFromResponse($response);
         $paginacao = $this->extrairPaginacaoFromResponse($response);
@@ -43,24 +58,59 @@ class Vimeo
     }
 
     /**
+    *
+    * Extrai entidades de vídeos a partir da resposta do Vimeo
+    * @param StdClass
+    * @return SplObjectStorage
+    **/
+    private function extrairVideosFromResponse($response)
+    {
+        $videos = new \SplObjectStorage();
+        foreach ($response->data as $videoData) {
+            $video = new Video();
+            $videoId = str_replace('/videos/', '', $videoData->uri);
+            $video->setId($videoId);
+            $video->setLink(Video::VIMEO_SUFIXO_LINK . $videoId);
+            $video->setTitulo($videoData->name);
+            if (isset($videoData->pictures->sizes[1]->link)) {
+                $video->setUrlThumbNail($videoData->pictures->sizes[1]->link);
+            }
+            $videos->attach($video);
+        }
+        return $videos;
+    }
+
+    /**
     * Busca vídeos utilizando a api do Vimeo a partir dos parâmetros passados
     * @param array opcoesBusca
     * @return SplObjectStorage 
     */
     public function paginar($opcoesBusca)
     {
-        $lib = new \Vimeo\Vimeo(self::CLIENT_ID, self::CLIENT_SECRET);
-        $lib->setToken(self::ACCESSTOKEN);
-        $scope = array();
-        $response = $lib->request(
-            '/videos',
+        $client = new Client(
+            VimeoClass::ROOT_ENDPOINT . "/videos" . "?query= " . $opcoesBusca["/videos?query"] .
+            "&page= " . $opcoesBusca["page"] . "&per_page=10",
             array(
-                'query' => $opcoesBusca['/videos?query'],
-                'page' => $opcoesBusca['page'],
-                'per_page' => $opcoesBusca['per_page']
-            ),
-            'GET'
+                'adapter' => 'Zend\Http\Client\Adapter\Curl',
+                'proxyhost' => 'proxy.devel',
+                'proxyport' => '8180',
+                'proxyuser' => 'danillobarreto',
+                'proxypass' => 'db25896',
+                'timeout'   => 100,
+            )
         );
+        $client->setMethod(Request::METHOD_GET);
+        $headers = array(
+
+        );
+        $headers[] = 'Accept: ' . VimeoClass::VERSION_STRING;
+        $headers[] = 'User-Agent: ' . VimeoClass::USER_AGENT;
+        $headers[] = 'Authorization: Bearer ' . self::ACCESSTOKEN;
+
+        $client->setHeaders($headers);
+        $response = $client->send();
+        $response = json_decode($response->getBody());
+
         $resultado = new \ArrayObject();
         $videos = $this->extrairVideosFromResponse($response);
         $paginacao = $this->extrairPaginacaoFromResponse($response);
@@ -68,27 +118,6 @@ class Vimeo
         $resultado->offsetSet('videos', $videos);
         $resultado->offsetSet('paginacao', $paginacao);
         return $resultado;
-    }
-
-    /**
-    *
-    * Extrai entidades de vídeos a partir da resposta do Vimeo
-    * @param array
-    * @return SplObjectStorage
-    **/
-    private function extrairVideosFromResponse($response)
-    {
-    	$videos = new \SplObjectStorage();
-    	foreach ($response['body']['data'] as $videoData) {
-    		$video = new Video();
-            $videoId = str_replace('/videos/', '', $videoData['uri']);
-    		$video->setId($videoId);
-    		$video->setLink(Video::VIMEO_SUFIXO_LINK . $videoId);
-    		$video->setTitulo($videoData['name']);
-    		$video->setUrlThumbNail($videoData['pictures']['sizes'][1]['link']);
-    		$videos->attach($video);
-    	}
-    	return $videos;
     }
 
     /**
@@ -113,9 +142,9 @@ class Vimeo
     private function extrairPaginacaoFromResponse($response)
     {
         $paginacao = new Paginacao();
-        $paginacao->next = $response['body']['paging']['next'];
-        $paginacao->previous = $response['body']['paging']['previous'];
-        $paginacao->totalResults = $response['body']['total'];
+        $paginacao->next = $response->paging->next;
+        $paginacao->previous = $response->paging->previous;
+        $paginacao->totalResults = $response->total;
 
         return $paginacao;
     }

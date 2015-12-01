@@ -4,31 +4,37 @@ namespace Application\Service;
 
 use Application\Entity\Video;
 use Application\Entity\Paginacao\YouTube as Paginacao;
+use Zend\Http\Request;
+use Zend\Http\Client;
 
 class YouTube
 {
-	const API_KEY = 'AIzaSyCA6Q6e5lTi7Kp4mrDd4TNy9Z6IVzl-dLg';
-
-    private $serviceLocator;
+    const URL = 'https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&key=AIzaSyCA6Q6e5lTi7Kp4mrDd4TNy9Z6IVzl-dLg';
 
 	/**
-    * Busca vídeos utulizando a api do YouTube a partir dos parâmetros passados
+    * Busca vídeos utilizando a api do YouTube a partir dos parâmetros passados
     * @param array
     * @return SplObjectStorage
     */
 	public function buscar(array $options)
 	{
-        $youtube = $this->getYouTubeClient();
+        $client = new Client(
+            self::URL . "&q=" . $options['query'],
+            array(
+                'adapter' => 'Zend\Http\Client\Adapter\Curl',
+                'proxyhost' => 'proxy.devel',
+                'proxyport' => '8180',
+                'proxyuser' => 'danillobarreto',
+                'proxypass' => 'db25896',
+                'timeout'   => 100,
+            )
+        );
+        $client->setMethod(Request::METHOD_GET);
 
 		try {
-		    $response = $youtube->search->listSearch(
-		    	'id,
-		    	snippet',
-		    	array(
-		    		'q' => $options['query'],
-		    		'maxResults' => 10,
-		    	)
-		    );
+            $response = $client->send();
+            $response = json_decode($response->getBody());
+
             $resultado = new \ArrayObject();
 		    $videos = $this->extrairVideosFromResponse($response);
             $paginacao = $this->extrairPaginacaoFromResponse($response);
@@ -48,18 +54,22 @@ class YouTube
     */
     public function paginar(array $options)
     {
-        $youtube = $this->getYouTubeClient();
+        $client = new Client(
+            self::URL . "&q=" . $options['query'] . "&pageToken= " . $options['pageToken'],
+            array(
+                'adapter' => 'Zend\Http\Client\Adapter\Curl',
+                'proxyhost' => 'proxy.devel',
+                'proxyport' => '8180',
+                'proxyuser' => 'danillobarreto',
+                'proxypass' => 'db25896',
+                'timeout'   => 100,
+            )
+        );
+        $client->setMethod(Request::METHOD_GET);
 
         try {
-            $response = $youtube->search->listSearch(
-                'id,
-                snippet',
-                array(
-                    'q' => $options['query'],
-                    'maxResults' => 10,
-                    'pageToken' => $options['pageToken']
-                )
-            );
+            $response = $client->send();
+            $response = json_decode($response->getBody());
             $resultado = new \ArrayObject();
             $videos = $this->extrairVideosFromResponse($response);
             $paginacao = $this->extrairPaginacaoFromResponse($response);
@@ -73,18 +83,6 @@ class YouTube
     }
 
     /**
-    *
-    * @return Google_Service_YouTube
-    **/
-    private function getYouTubeClient()
-    {
-        $client = new \Google_Client();
-        $client->setDeveloperKey(self::API_KEY);
-
-        return new \Google_Service_YouTube($client);
-    }
-
-    /**
     * Extrai entidades de vídeos a partir da resposta do YouTube
     * 
     * @param array
@@ -93,13 +91,12 @@ class YouTube
     private function extrairVideosFromResponse($response)
     {
     	$videos = new \SplObjectStorage();
-    	foreach ($response->getItems() as $videoData) {
+    	foreach ($response->items as $videoData) {
     		$video = new Video();
-    		$video->setId($videoData->getId()->getVideoId());
     		$this->extrairLink($video, $videoData);
-    		$video->setTitulo($videoData->getSnippet()['title']);
+    		$video->setTitulo($videoData->snippet->title);
             $video->setUrlThumbNail(
-                $videoData->getSnippet()->getThumbnails()->getMedium()->getUrl()
+                $videoData->snippet->thumbnails->medium->url
             );
     		$videos->attach($video);
     	}
@@ -115,10 +112,10 @@ class YouTube
     */
     private function extrairLink($video, $dados)
     {
-        if ($dados->getId()->getKind() == Video::YOUTUBE_CANAL) {
-            $video->setLink(Video::YOUTUBE_CANAL_SUFIXO_LINK . $dados->getSnippet()->getChannelId());
-        } elseif ($dados->getId()->getKind() == Video::YOUTUBE_VIDEO) {
-            $video->setLink(Video::YOUTUBE_SUFIXO_LINK . $dados->getId()->getVideoId());
+        if ($dados->id->kind == Video::YOUTUBE_CANAL) {
+            $video->setLink(Video::YOUTUBE_CANAL_SUFIXO_LINK . $dados->snippet->channelId);
+        } elseif ($dados->id->kind == Video::YOUTUBE_VIDEO) {
+            $video->setLink(Video::YOUTUBE_SUFIXO_LINK . $dados->id->videoId);
         }
     }
 
@@ -131,9 +128,9 @@ class YouTube
     private function extrairPaginacaoFromResponse($response)
     {
         $paginacao = new Paginacao();
-        $paginacao->nextToken = $response->getNextPageToken();
-        $paginacao->prevToken = $response->getPrevPageToken();
-        $paginacao->totalResults = $response->getPageInfo()->getTotalResults();
+        $paginacao->nextToken = $response->nextPageToken;
+        $paginacao->prevToken = isset($response->prevPageToken) ? $response->prevPageToken : "";
+        $paginacao->totalResults = $response->pageInfo->totalResults;
 
         return $paginacao;
     }
